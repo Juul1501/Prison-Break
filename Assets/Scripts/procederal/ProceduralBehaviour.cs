@@ -36,24 +36,22 @@ public class ProceduralBehaviour : MonoBehaviour
     private void Start()
     {
         pt = new ProceduralTerrain(worldSize, worldSize, passes);
-        t.terrainData.size = new Vector3(worldSize * 2, maxHeight, worldSize * 2);
-        t.terrainData.heightmapResolution = worldSize;
+        //t.terrainData.size = new Vector3(worldSize * 2, maxHeight, worldSize * 2);
+        //t.terrainData.heightmapResolution = worldSize;
         Generate();
     }
 
     void Update()
     {
-        if (Input.GetButtonDown("Fire1"))
-        {
-            Generate();
-        }
+        //if (Input.GetButtonDown("Fire1"))
+        //{
+        //    Generate();
+        //}
     }
 
     public void Generate()
     {
         setSeed(seed);
-        Debug.Log("We can generate " + int.MaxValue + " versions of this procedure");
-        Debug.Log("Generating version: " + seed);
 
         foreach (var obj in GameObject.FindGameObjectsWithTag("Procedural"))
         {
@@ -91,4 +89,5 @@ public class ProceduralBehaviour : MonoBehaviour
         }
         //perlinSeed = Random.Range(0.0f, 1000000f);
     }
+
 }

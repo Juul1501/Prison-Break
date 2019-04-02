@@ -7,7 +7,7 @@ using System;
 [Serializable]
 public class HeightPass
 {
-    public enum PassType {PerlinBased, RandomBased}
+    public enum PassType {PerlinBased, RandomBased, HeightMapBased}
     public string name;
     public float height;
     public float detail;

@@ -2,21 +2,12 @@
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.SceneManagement;
+using UnityStandardAssets.Characters.FirstPerson;
 
 public class PlayerController : MonoBehaviour
 {
+
     public float range = 2f;
-    public float shootRange = 20f;
-    private Camera camera;
-    public static int score;
-    public Text Score;
-    void Start()
-    {
-        score = 0;
-        camera = GetComponent<Camera>();
-    }
 
     void Update()
     {
@@ -24,41 +15,34 @@ public class PlayerController : MonoBehaviour
         {
             Interact();
         }
-        if (Input.GetButtonDown("Shoot"))
+        
+        if (Input.GetButtonDown("Inventory"))
         {
-            Shoot();
+            SetInventoryVisible(!InventoryUI.instance.gameObject.activeSelf);
         }
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            SceneManager.LoadScene(0);
-        }
+    }
+
+    public void SetInventoryVisible(bool value)
+    {
+        InventoryUI.instance.gameObject.SetActive(value);
+        GetComponentInParent<FirstPersonController>().enabled = !value;
+        Cursor.lockState = value ? CursorLockMode.None : CursorLockMode.Locked;  
     }
 
     void Interact()
     {
-        Ray r = new Ray(transform.position, camera.transform.forward);
+        Ray r = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
         RaycastHit hit;
 
-        if (Physics.Raycast(r, out hit, range))
-        {
+        int ignorePlayer =~ LayerMask.GetMask("Player");
+        
+        if (Physics.Raycast(r, out hit, range, ignorePlayer))
+        {    
+            //Debug.Log("Hit " + hit.collider.gameObject.name);
             IInteractable i = hit.collider.gameObject.GetComponent<IInteractable>();
             if (i != null)
             {
                 i.Action();
-            }
-        }
-    }
-    void Shoot()
-    {
-        Ray r = new Ray(transform.position, camera.transform.forward);
-        RaycastHit hit;
-
-        if (Physics.Raycast(r, out hit, shootRange))
-        {
-            IEnemy e = hit.collider.gameObject.GetComponent<IEnemy>();
-            if (e != null)
-            {
-                e.Action();
             }
         }
     }
